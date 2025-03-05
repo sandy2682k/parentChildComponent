@@ -1,0 +1,62 @@
+<template>
+    <lightning-card title="Child Component" icon-name="standard:bot" class="child-card">
+        <div slot="actions">
+            <lightning-badge label="Listening" if:false={parentMessage}></lightning-badge>
+            <lightning-badge label="Message Received" variant="success" if:true={parentMessage}></lightning-badge>
+        </div>
+
+        <div class="slds-p-horizontal_medium slds-p-vertical_small">
+            <!-- Waiting state when no message -->
+            <div if:false={parentMessage} class="slds-illustration slds-illustration_small">
+                <div class="slds-text-color_weak slds-text-align_center">
+                    <lightning-icon icon-name="utility:listen" size="medium" class="slds-m-bottom_small pulse">
+                    </lightning-icon>
+                    <p>Waiting for message from Parent...</p>
+                </div>
+            </div>
+
+            <!-- Message received state -->
+            <div if:true={parentMessage} class="slds-m-bottom_medium message-received">
+                <div class="slds-text-heading_small slds-text-color_weak">Received message:</div>
+                <div class="message-bubble slds-m-top_x-small">
+                    {parentMessage}
+                </div>
+
+                <!-- Response options -->
+                <div class="slds-grid slds-grid_align-center slds-m-top_medium">
+                    <lightning-button-group>
+                        <lightning-button label="Send Acknowledgment" icon-name="utility:check"
+                            onclick={sendAcknowledgment} variant="brand">
+                        </lightning-button>
+                        <lightning-button label="Send Custom Response" icon-name="utility:reply"
+                            onclick={showCustomResponseModal}>
+                        </lightning-button>
+                    </lightning-button-group>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom response modal -->
+        <template if:true={showModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Send Custom Response</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <lightning-textarea label="Your Response" value={customResponse}
+                            placeholder="Type your custom response here..." onchange={handleResponseChange}>
+                        </lightning-textarea>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" onclick={closeModal} class="slds-m-right_x-small">
+                        </lightning-button>
+                        <lightning-button label="Send Response" variant="brand" onclick={sendCustomResponse}>
+                        </lightning-button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+    </lightning-card>
+</template>
